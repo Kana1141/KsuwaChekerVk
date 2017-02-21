@@ -24,7 +24,7 @@ namespace KsuwaChecker
             }
             public override void Write(string message)
             {
-            _originalOut.Write($"{DateTime.Now:T} {message}");
+            _originalOut.Write($"> {message}");
             }
         }
     }

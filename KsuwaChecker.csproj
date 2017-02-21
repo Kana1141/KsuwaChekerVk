@@ -42,11 +42,11 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="xNet">
-      <HintPath>..\..\..\..\Downloads\xNet.dll</HintPath>
+      <HintPath>..\VK_KsuwaCheker\xNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Autorise.cs" />
+    <Compile Include="MainWork.cs" />
     <Compile Include="Output with time.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

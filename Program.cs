@@ -1,31 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+using xNet;
 
 namespace KsuwaChecker
 {
     internal class Program
     {
-        private static string Mail { get; set; }
-
-        private static string Password { get; set; }
-
         private static void Main()
         {
-            Console.Title = "Ksuwa Cheker";            
             Console.Write(@"Enter your mail: ");
-            Mail = Console.ReadLine();
+            //var login = Console.ReadLine();
+            var login = "lewa.rucher@gmail.com";
             Console.Write(@"Enter your password: ");
-            Password = Console.ReadLine();
-            Console.ForegroundColor = ConsoleColor.Green;
+            //var password = Console.ReadLine();
+            var password = "Lewa11411141";
+            var request = new HttpRequest()
+            {
+                UserAgent = Http.ChromeUserAgent(),
+                Cookies = new CookieDictionary()
+            };
+            var response =
+                request.Get(
+                    "vk.com").ToString();
+            var rp = new RequestParams
+            {
+                ["act"] = "login",
+                ["role"] = "al_frame",
+                ["ip_h"] = response.Substring("ip_h\" value=\"", "\""),
+                ["lg_h"] = response.Substring("lg_h\" value=\"", "\""),
+                ["_origin"] = "https://vk.com",
+                ["captcha_sid"] = "",
+                ["captcha_key"] = "",
+                ["email"] = login,
+                ["pass"] = password,
+                ["expire"] = "0"
+            };
+            Console.Title = "Ksuwa Cheker";
             Console.SetOut(new PrefixedWriter());
-            Console.WriteLine(@"Logined with: {0} {1}", Mail, Password);
-            Console.ResetColor();          
-            var gg = new Autorise();
-            gg.Autroisation(Mail, Password);
+            bool isLoggined;
+            do
+            {
+                isLoggined = MainWork.TryToLogin(request, rp, login, password);
+            }
+            while (isLoggined == false);
+            Console.WriteLine("end");
+            bool x;
+            var wrongValue = true;
+            {
+                while (wrongValue)
+                {
+                    try
+                    {
+                        x = MainWork.ChekingOnline(request);
+                        wrongValue = false;
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception.Message);
+                    }
+                }
+            }
             Console.ReadKey();
         }
     }
