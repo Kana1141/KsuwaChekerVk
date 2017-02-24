@@ -12,10 +12,7 @@ namespace KsuwaChecker
         {
             Console.Write(@"Enter your mail: ");
             //var login = Console.ReadLine();
-            var login = "lewa.rucher@gmail.com";
-            Console.Write(@"Enter your password: ");
-            //var password = Console.ReadLine();
-            var password = "Lewa11411141";
+ 
             var request = new HttpRequest()
             {
                 UserAgent = Http.ChromeUserAgent(),
