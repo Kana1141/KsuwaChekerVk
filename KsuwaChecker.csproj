@@ -50,6 +50,7 @@
     <Compile Include="Output with time.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchedPerson.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Mime;
+using System.Threading;
 using xNet;
 
 namespace KsuwaChecker
@@ -9,7 +12,10 @@ namespace KsuwaChecker
         {
             Console.Write(@"Enter your mail: ");
             //var login = Console.ReadLine();
- 
+            var login = "lewa.rucher@gmail.com";
+            Console.Write(@"Enter your password: ");
+            //var password = Console.ReadLine();
+            var password = "Lewa11411141";
             var request = new HttpRequest()
             {
                 UserAgent = Http.ChromeUserAgent(),
@@ -40,23 +46,72 @@ namespace KsuwaChecker
             }
             while (isLoggined == false);
             Console.WriteLine("end");
-            bool x;
+            var searchedPerson = new SearchedPerson();
             var wrongValue = true;
             {
                 while (wrongValue)
                 {
                     try
                     {
-                        x = MainWork.ChekingOnline(request);
+                        Console.Write(@"Enter person id: vk.com/");
+                        searchedPerson.PersonId = Console.ReadLine();
+                        if (string.IsNullOrEmpty(searchedPerson.PersonId)) throw new ArgumentNullException(nameof(searchedPerson.PersonId));
+                        searchedPerson.PersonName = MainWork.ChekingPersonName(request, searchedPerson.PersonId);
+                        Console.WriteLine(@"Person found: {0}", searchedPerson.PersonName);
+                        searchedPerson.Online = MainWork.ChekingOnline(request, searchedPerson.PersonId);
+                        if (searchedPerson.Online)
+                        {
+                            Console.WriteLine("{0} is online!", searchedPerson.PersonName);
+                            Console.Write("Do you wanna get notified when person come offline? Y/N: ");
+                            if (Console.ReadLine() == "Y")
+                            {
+                                NotifyThenOffline(searchedPerson.PersonId, request, true, searchedPerson.PersonName);
+                            }
+                            else
+                            {
+                                Environment.Exit(0);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("{0} is offline!", searchedPerson.PersonName);
+                            Console.WriteLine("{0}", MainWork.GettingLastOnline(request, searchedPerson.PersonId));
+                            Console.Write("Do you wanna get notified when person come online? Y/N: ");
+                            if (Console.ReadLine() == "Y")
+                            {
+                                NotifyThenOffline(searchedPerson.PersonId, request, false, searchedPerson.PersonName);
+                            }
+                            else
+                            {
+                                Environment.Exit(0);
+                            }
+                        }
                         wrongValue = false;
                     }
                     catch (Exception exception)
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(exception.Message);
+                        Console.ResetColor();
                     }
                 }
             }
+            
+           
             Console.ReadKey();
+        }
+
+        private static void NotifyThenOffline(string searchedPersonPersonId, HttpRequest request, bool check, string searchedPersonName)
+        {
+            Console.Write("Enter your phone number: +7");
+            var phone = Console.ReadLine();
+            while (MainWork.ChekingOnline(request, searchedPersonPersonId) == check)
+            {
+                MainWork.ChekingOnline(request, searchedPersonPersonId);
+                Thread.Sleep(5000);
+            }
+            Console.WriteLine(check == true ? "{0} gone offline" : "{0} come online!", searchedPersonName);
+            throw new NotImplementedException();
         }
     }
 }
