@@ -12,7 +12,7 @@ namespace KsuwaChecker
         {
             Console.Write(@"Enter your mail: ");
             //var login = Console.ReadLine();
- 
+ fasdf
             var request = new HttpRequest()
             {
                 UserAgent = Http.ChromeUserAgent(),
